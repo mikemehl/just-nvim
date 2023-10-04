@@ -20,6 +20,12 @@ global record vim
    call: function(func: string, ...: any)
    call: function(string, ...: any): any
 
+   record SystemReturn
+      wait: function(SystemReturn): table
+   end
+
+   system: function(table, table): SystemReturn
+
    enum Mode
       "n" -- Normal
       "no" -- Operator-pending
