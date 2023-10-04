@@ -1,1 +1,1 @@
-print("HELLO WORLD")
+local just = require('just-nvim.just')
