@@ -27,11 +27,13 @@ endfunction
 " only the `myluamodule` directory is specified, Neovim will look for a
 " `lua.lua` file, then an `init.lua` file in that directory. In this case, it
 " will find the `lua\myluamodule\init.lua` file.
-lua myluamodule = require("myluamodule")
+lua just = require("just-nvim")
+lua =just
+lua =just.new()
 
 " Common convention in the Neovim plugin community is to require the module
 " and use it all at once:
-lua require'myluamodule'.setup({p1 = "value1"})
+" lua require'myluamodule'.setup({p1 = "value1"})
 
 
 

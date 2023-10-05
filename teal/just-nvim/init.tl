@@ -1,2 +1,1 @@
-local just = require('just-nvim.just')
-just.init()
+return require('just-nvim.just').Just

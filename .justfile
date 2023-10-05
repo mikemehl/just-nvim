@@ -10,7 +10,7 @@ setup:
 
 alias e := edit
 edit:
-  nvim --cmd 'set rtp+=.'
+  nvim --cmd 'set rtp+=./lua/?.lua'
 
 alias b := build
 build:
