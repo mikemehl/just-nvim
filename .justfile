@@ -14,7 +14,7 @@ edit:
 
 alias b := build
 build:
-  cyan build
+  cyan build -u -p
 
 alias wb := watch-build
 watch-build:
@@ -22,7 +22,7 @@ watch-build:
 
 alias c := check
 check:
-  cyan check **/*.tl
+  cyan build --check-only
 
 alias wc := watch-check
 watch-check:

@@ -1,4 +1,38 @@
-local _tl_compat; if (tonumber((_VERSION or ''):match('[%d.]*$')) or 0) < 5.3 then local p, m = pcall(require, 'compat53.module'); if p then _tl_compat = m end end; local string = _tl_compat and _tl_compat.string or string; local table = _tl_compat and _tl_compat.table or table; local M = {Just = {}, }
+local _tl_compat; if (tonumber((_VERSION or ''):match('[%d.]*$')) or 0) < 5.3 then local p, m = pcall(require, 'compat53.module'); if p then _tl_compat = m end end; local string = _tl_compat and _tl_compat.string or string; local table = _tl_compat and _tl_compat.table or table
+local Just = {Opts = {}, }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -27,15 +61,31 @@ local function get_recipies()
    return recipes
 end
 
-function M.Just.new()
-   local just = {}
-   just.cmd = find_command()
-   just.recipes = get_recipies()
-   return M.Just
+function Just.new()
+   return {}
 end
 
-function M.Just:valid()
+function Just:init()
+   self.cmd = find_command()
+   self.recipes = get_recipies()
+   return self:valid()
+end
+
+function Just:valid()
    return self.cmd ~= nil and #self.recipes > 0
 end
 
-return M
+local function on_recipe_exit(sys_cmd)
+   if sys_cmd.code ~= 0 then
+      vim.notify("Failed to run just recipe", vim.log.levels.ERROR)
+   else
+      vim.notify("Just recipe ran successfully", vim.log.levels.INFO)
+   end
+end
+
+function Just:run_recipe(recipie, opts)
+   vim.fn.systemlist({ self.cmd, recipie }, { stdin = true, stdout = true, on_exit = on_recipe_exit })
+   return true
+end
+
+return Just
