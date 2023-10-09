@@ -5,7 +5,7 @@ local function find_command()
 	if just_cmd.code ~= 0 then
 		return nil
 	end
-	return just_cmd.stdout
+	return string.gsub(just_cmd.stdout, "\n", "")
 end
 
 local function get_recipies()
@@ -13,7 +13,6 @@ local function get_recipies()
 	local recipes_cmd = vim.system({ "just", "--summary" }, { text = true }):wait()
 	if recipes_cmd.code == 0 then
 		for line in string.gmatch(recipes_cmd.stdout, "%w+") do
-			print(line)
 			table.insert(recipes, line)
 		end
 	end
@@ -43,11 +42,13 @@ local function on_recipe_exit(sys_cmd)
 	end
 end
 
-function Just:run_recipe(recipie, opts)
-	if recipie == nil then
-		recipie = self.recipes[1]
+local function new_window() end
+
+function Just:run_recipe(recipe, opts)
+	if recipe == "" then
+		recipe = self.recipes[1]
 	end
-	vim.system({ self.cmd, recipie }, { text = true }, on_recipe_exit)
+	vim.fn.termopen("just " .. recipe)
 	return true
 end
 

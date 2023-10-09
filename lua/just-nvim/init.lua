@@ -8,6 +8,7 @@ function M.setup(opts)
 		return
 	end
 	vim.api.nvim_create_user_command("Just", function(cmd)
+		print(cmd.args)
 		if cmd.args == nil then
 			return
 		end
