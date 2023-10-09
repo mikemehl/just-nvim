@@ -1,26 +1,22 @@
+Just = require("just-nvim.just").new()
 
-local Just = require('just-nvim.just')
-just_handle = Just.new()
-
-
-local M = {Opts = {}, }
-
-
-
-
-
-
-
-
+local M = { Opts = {} }
 
 function M.setup(opts)
-   if not just_handle:init() then
-      vim.notify("just not found", vim.log.levels.INFO)
-   end
+	if not Just:init() then
+		vim.notify("just not found", vim.log.levels.INFO)
+		return
+	end
+	vim.api.nvim_create_user_command("Just", function(cmd)
+		if cmd.args == nil then
+			return
+		end
+		Just:run_recipe(cmd.args)
+	end, {})
 end
 
 function M.handle()
-   return just_handle
+	return Just
 end
 
 return M
