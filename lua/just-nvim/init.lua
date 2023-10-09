@@ -1,9 +1,8 @@
-Just = require("just-nvim.just").new()
+local just_nvim = {}
+just_handle = require("just-nvim.just").new()
 
-local M = { Opts = {} }
-
-function M.setup(opts)
-	if not Just:init() then
+function just_nvim.setup(opts)
+	if not just_handle:init() then
 		vim.notify("just not found", vim.log.levels.INFO)
 		return
 	end
@@ -12,12 +11,12 @@ function M.setup(opts)
 		if cmd.args == nil then
 			return
 		end
-		Just:run_recipe(cmd.args)
+		just_handle:run_recipe(cmd.args)
 	end, {})
 end
 
-function M.handle()
-	return Just
+function just_nvim.handle()
+	return just_handle
 end
 
-return M
+return just_nvim

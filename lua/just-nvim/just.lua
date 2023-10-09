@@ -1,4 +1,7 @@
-local Just = { Opts = {} }
+local window = require("just-nvim.window")
+local just = {}
+
+local Just = {}
 
 local function find_command()
 	local just_cmd = vim.system({ "which", "just" }, { text = true }):wait()
@@ -19,9 +22,12 @@ local function get_recipies()
 	return recipes
 end
 
-function Just.new()
-	local self = setmetatable({}, { __index = Just })
-	return self
+local function on_recipe_exit(sys_cmd)
+	if sys_cmd.code ~= 0 then
+		vim.notify("Failed to run just recipe", vim.log.levels.ERROR)
+	else
+		vim.notify("Just recipe ran successfully", vim.log.levels.INFO)
+	end
 end
 
 function Just:init()
@@ -34,22 +40,19 @@ function Just:valid()
 	return self.cmd ~= nil and #self.recipes > 0
 end
 
-local function on_recipe_exit(sys_cmd)
-	if sys_cmd.code ~= 0 then
-		vim.notify("Failed to run just recipe", vim.log.levels.ERROR)
-	else
-		vim.notify("Just recipe ran successfully", vim.log.levels.INFO)
-	end
-end
-
-local function new_window() end
-
-function Just:run_recipe(recipe, opts)
+function Just:run_recipe(recipe)
+	assert(type(recipe) == "string", "Recipe must be a string")
 	if recipe == "" then
 		recipe = self.recipes[1]
 	end
-	vim.fn.termopen("just " .. recipe)
+	local win = window.new()
+	vim.fn.termopen(self.cmd .. " " .. recipe)
 	return true
 end
 
-return Just
+function just.new()
+	local self = setmetatable({}, { __index = Just })
+	return self
+end
+
+return just
