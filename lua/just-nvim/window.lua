@@ -44,6 +44,13 @@ end
 function Window:run(cmd)
 	vim.api.nvim_set_current_win(self.winid)
 	vim.fn.termopen(cmd)
+	vim.api.nvim_create_autocmd("TermClose", {
+		buffer = self.bufnr,
+		callback = function()
+			self:close()
+			return true
+		end,
+	})
 end
 
 function window.new(method)
