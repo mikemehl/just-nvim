@@ -22,14 +22,6 @@ local function get_recipies()
 	return recipes
 end
 
-local function on_recipe_exit(sys_cmd)
-	if sys_cmd.code ~= 0 then
-		vim.notify("Failed to run just recipe", vim.log.levels.ERROR)
-	else
-		vim.notify("Just recipe ran successfully", vim.log.levels.INFO)
-	end
-end
-
 function Just:init()
 	self.cmd = find_command()
 	self.recipes = get_recipies()
@@ -40,13 +32,14 @@ function Just:valid()
 	return self.cmd ~= nil and #self.recipes > 0
 end
 
-function Just:run_recipe(recipe)
+function Just:run_recipe(recipe, win_method)
 	assert(type(recipe) == "string", "Recipe must be a string")
 	if recipe == "" then
 		recipe = self.recipes[1]
 	end
-	local win = window.new()
-	vim.fn.termopen(self.cmd .. " " .. recipe)
+	local win = window.new(win_method)
+	win:open()
+	win:run(self.cmd .. " " .. recipe)
 	return true
 end
 
