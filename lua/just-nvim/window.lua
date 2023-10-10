@@ -43,8 +43,7 @@ end
 
 function Window:run(cmd)
 	vim.api.nvim_set_current_win(self.winid)
-	local chan_id = vim.api.nvim_open_term(self.bufnr, {})
-	vim.api.nvim_chan_send(chan_id, cmd .. "\n")
+	vim.fn.termopen(cmd)
 end
 
 function window.new(method)
