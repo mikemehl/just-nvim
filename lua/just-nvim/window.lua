@@ -27,13 +27,22 @@ local function open_split(bufnr)
 	return winid
 end
 
+local function open_tmux_pane(cmd)
+	vim.system({ "tmux", "split-window", "-h", "-p", "80", "-c", vim.fn.getcwd(), cmd .. " ; read -n 1" }):wait()
+end
+
+local function is_valid_method(method)
+	return method == "float" or method == "split" or method == "tmux-pane" or method == "tmux-win"
+end
+
 function Window:open()
 	if self.method == "float" then
 		self.winid = open_float(self.bufnr)
 	elseif self.method == "split" then
 		self.winid = open_split(self.bufnr)
+	else
+		return
 	end
-	print(vim.inspect(self.winid))
 	vim.api.nvim_set_current_win(self.winid)
 end
 
@@ -42,6 +51,10 @@ function Window:close()
 end
 
 function Window:run(cmd)
+	if self.method == "tmux-pane" then
+		open_tmux_pane(cmd)
+		return nil
+	end
 	vim.api.nvim_set_current_win(self.winid)
 	vim.fn.termopen(cmd)
 	vim.api.nvim_create_autocmd("TermClose", {
@@ -61,7 +74,10 @@ function window.new(method)
 		method = method or "float",
 		winid = nil,
 	}, { __index = Window })
-	assert(self.method == "float" or self.method == "split", "method must be float or split")
+	assert(
+		is_valid_method(self.method),
+		"Invalid method " .. method .. ". Must be one of: float, split, tmux-pane, tmux-win"
+	)
 	return self
 end
 

@@ -1,1 +1,1 @@
-require("just-nvim").setup({ method = "float" })
+require("just-nvim").setup({ method = "tmux-pane" })

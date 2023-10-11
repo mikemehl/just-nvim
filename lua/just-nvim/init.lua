@@ -20,7 +20,9 @@ end
 
 function just_nvim.run_recipe(recipe)
 	local win = just_handle:run_recipe(recipe, _G.opts.method)
-	table.insert(just_windows, win)
+	if win then
+		table.insert(just_windows, win)
+	end
 end
 
 function just_nvim.handle()
