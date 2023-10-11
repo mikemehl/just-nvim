@@ -28,7 +28,11 @@ local function open_split(bufnr)
 end
 
 local function open_tmux_pane(cmd)
-	vim.system({ "tmux", "split-window", "-h", "-p", "80", "-c", vim.fn.getcwd(), cmd .. " ; read -n 1" }):wait()
+	vim.system({ "tmux", "split-window", "-h", "-p", "50", "-c", vim.fn.getcwd(), cmd .. " ; read -n 1" }):wait()
+end
+
+local function open_tmux_win(cmd)
+	vim.system({ "tmux", "new-window", "-c", vim.fn.getcwd(), cmd .. " ; read -n 1" }):wait()
 end
 
 local function is_valid_method(method)
@@ -53,6 +57,9 @@ end
 function Window:run(cmd)
 	if self.method == "tmux-pane" then
 		open_tmux_pane(cmd)
+		return nil
+	elseif self.method == "tmux-win" then
+		open_tmux_win(cmd)
 		return nil
 	end
 	vim.api.nvim_set_current_win(self.winid)

@@ -1,1 +1,1 @@
-require("just-nvim").setup({ method = "tmux-pane" })
+require("just-nvim").setup({ method = "tmux-win" })
