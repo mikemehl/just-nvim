@@ -47,7 +47,9 @@ function Window:run(cmd)
 	vim.api.nvim_create_autocmd("TermClose", {
 		buffer = self.bufnr,
 		callback = function()
-			self:close()
+			vim.keymap.set({ "n", "x" }, "q", function()
+				self:close()
+			end, { noremap = false, silent = false })
 			return true
 		end,
 	})

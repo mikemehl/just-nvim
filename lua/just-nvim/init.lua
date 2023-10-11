@@ -1,6 +1,7 @@
 local just_nvim = {}
 
 _G.just_handle = require("just-nvim.just").new()
+_G.just_windows = {}
 
 local default_opts = {
 	method = "split",
@@ -13,11 +14,13 @@ function just_nvim.setup(opts)
 		return
 	end
 	vim.api.nvim_create_user_command("Just", function(cmd)
-		if cmd.args == nil then
-			return
-		end
-		just_handle:run_recipe(cmd.args, _G.opts.method)
+		just_nvim.run_recipe(cmd.args)
 	end, {})
+end
+
+function just_nvim.run_recipe(recipe)
+	local win = just_handle:run_recipe(recipe, _G.opts.method)
+	table.insert(just_windows, win)
 end
 
 function just_nvim.handle()

@@ -40,7 +40,7 @@ function Just:run_recipe(recipe, win_method)
 	local win = window.new(win_method)
 	win:open()
 	win:run(self.cmd .. " " .. recipe)
-	return true
+	return win
 end
 
 function just.new()
