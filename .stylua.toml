@@ -1,0 +1,5 @@
+indent_type = "spaces"
+indent_width = 3
+
+[sort_requires]
+enabled = true
