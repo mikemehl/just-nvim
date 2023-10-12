@@ -1,7 +1,14 @@
+---@module 'window'
 local window = {}
 
+---@class Window
+---@field bufnr integer
+---@field method SplitMethod
 local Window = {}
 
+---Open a floating window.
+---@param bufnr integer
+---@return integer window id
 local function open_float(bufnr)
   local width = vim.api.nvim_get_option("columns")
   local height = vim.api.nvim_get_option("lines")
@@ -20,6 +27,9 @@ local function open_float(bufnr)
   return vim.api.nvim_open_win(bufnr, true, opts)
 end
 
+---Open a split window.
+---@param bufnr integer
+---@return integer window id
 local function open_split(bufnr)
   vim.cmd("vsplit")
   local winid = vim.api.nvim_get_current_win()
@@ -27,18 +37,26 @@ local function open_split(bufnr)
   return winid
 end
 
+---Open a tmux pane running the recipe
+---@param cmd string
 local function open_tmux_pane(cmd)
   vim.system({ "tmux", "split-window", "-h", "-p", "50", "-c", vim.fn.getcwd(), cmd .. " ; read -n 1" }):wait()
 end
 
+---Open a tmux window running the recipe
+---@param cmd string
 local function open_tmux_win(cmd)
   vim.system({ "tmux", "new-window", "-c", vim.fn.getcwd(), cmd .. " ; read -n 1" }):wait()
 end
 
+---Check if the window method is valid.
+---@param method string
+---@return boolean
 local function is_valid_method(method)
   return method == "float" or method == "split" or method == "tmux-pane" or method == "tmux-win"
 end
 
+---Open the window.
 function Window:open()
   if self.method == "float" then
     self.winid = open_float(self.bufnr)
@@ -50,10 +68,14 @@ function Window:open()
   vim.api.nvim_set_current_win(self.winid)
 end
 
+---Close the window.
 function Window:close()
   vim.api.nvim_win_close(self.winid, true)
 end
 
+---Run the command in the window.
+---@param cmd string
+---@return nil
 function Window:run(cmd)
   if self.method == "tmux-pane" then
     open_tmux_pane(cmd)
@@ -73,8 +95,12 @@ function Window:run(cmd)
       return true
     end,
   })
+  return nil
 end
 
+---Return a new window for running a recipe.
+---@param method SplitMethod
+---@return Window
 function window.new(method)
   local self = setmetatable({
     bufnr = vim.api.nvim_create_buf(false, false),
