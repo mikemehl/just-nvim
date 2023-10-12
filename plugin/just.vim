@@ -1,1 +1,1 @@
-lua just = require("just")
+lua require("just").setup()
