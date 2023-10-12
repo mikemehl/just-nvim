@@ -1,0 +1,9 @@
+{
+  "workspace.checkThirdParty": true,
+  "workspace.library": [
+    "/home/mike/.local/share/nvim/lazy/neodev.nvim/types/nightly",
+    "/usr/local/share/nvim/runtime/lua",
+    "/home/mike/code/just-nvim/lua",
+    "/usr/local/share/lua/5.1"
+  ]
+}

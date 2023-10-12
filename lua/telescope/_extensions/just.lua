@@ -31,7 +31,7 @@ local function previewer()
 end
 
 local function picker(opts)
-  local opts = opts or {}
+  opts = opts or {}
   pickers
       .new(opts, {
         prompt_title = "Just Recipes",
